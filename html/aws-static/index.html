@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>IoT Footfall Counting | Causeway Coding</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style media="screen">
+        .row {
+          margin-top: 20px;
+        }
+    </style>
+
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="page-header">
+        <img class="pull-right" src="https://s3-eu-west-1.amazonaws.com/cc-tciot-footfall-demo/logo-small.png" />
+        <h1>Causeway coding <small>LoRaWAN Prototype</small></h1>
+        <p>
+          This data represents a very basic, and naive, approach
+          to tracking activity. It uses a remote, IoT-enabled, motion
+          detector that counts the number of times it has triggered
+          within a 15 minute window and transmits those counters to
+          The Things Network (a LoRaWAN network). From there the data
+          is picked up using an AWS IoT Core MQTT subscription and
+          stored in a DynamoDB table.
+        </p>
+        <p>
+          <i>Please note that this page only shows the most recent
+            100 results, which is about 24 hours of data.</i>
+        </p>
+      </div>
+
+      <div class="row collapse" id="errors">
+        <div class="col-xs-12">
+          <div class="panel panel-danger">
+            <div class="panel-body">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="results">
+        <div class="col-xs-12" >
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="pull-right">
+                  <input id="queryDataButton" type="button" class="btn btn-xs btn-primary" value="Refresh data" onclick="queryData();" />
+                  <input id="clearDataButton" type="button" class="btn btn-xs btn-danger"  value="Clear data" onclick="clearData();" />
+                </div>
+                <h3 class="panel-title">Data</h3>
+              </div>
+
+              <div class="panel-body">
+                <canvas id="myChart" width="400" height="100"></canvas>
+              </div>
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th> Device ID </th>
+                    <th class="text-center"> Counter </th>
+                    <th class="text-right"> Date &amp; time </th>
+                  </tr>
+                </thead>
+                <tbody id="results-tbody">
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+
+  <!-- ChartJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"
+    integrity="sha256-MZo5XY1Ah7Z2Aui4/alkfeiq3CopMdV/bbkc/Sh41+s="
+    crossorigin="anonymous"></script>
+
+  <script>
+
+    AWS.config.region = 'eu-west-1';
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "eu-west-1:23cc5266-2dbc-49b1-9a7e-d3bab9b0e94d",
+        RoleArn: "arn:aws:iam::249327001683:role/Cognito_cc_tciot_footfallUnauth_Role"
+    });
+
+    var dynamodb = new AWS.DynamoDB();
+    var docClient = new AWS.DynamoDB.DocumentClient();
+
+    function clearData() {
+        $("#results-tbody").empty();
+        drawChart([]);
+    }
+
+    function queryData() {
+
+        clearData();
+
+        var params = {
+            TableName : "cc-tciot-footfall",
+            ScanIndexForward: false,
+            Limit: 100,
+            KeyConditionExpression: "dev_id = :dev_id",
+            ExpressionAttributeValues: {
+                ":dev_id": 'cc_tciot_001'
+            }
+        };
+
+        docClient.query(params, function(err, data) {
+
+            if (err) {
+
+                $('#errors .panel-body').innerHTML =
+                    "Unable to get the data: " + "\n"
+                    + JSON.stringify(err, undefined, 2);
+
+                $('#errors').collapse('show');
+
+            } else {
+
+                $('#errors').collapse('hide');
+
+                var chartData = [];
+
+                data.Items.forEach(function(entry) {
+                    var the_date = new Date(entry.time).toUTCString();
+
+                    var newRowContent =
+                        "<tr><td>"
+                        + entry.dev_id
+                        + "</td><td class=\"text-center\">"
+                        + entry.footfall
+                        + "</td><td class=\"text-right\">"
+                        + the_date
+                        + "</td></tr>";
+
+                    $("#results-tbody").append(newRowContent);
+
+                    chartData.push({x: entry.time, y: entry.footfall})
+                });
+
+                drawChart(chartData);
+            }
+        });
+    }
+
+    function drawChart(data) {
+      var ctx = document.getElementById("myChart").getContext('2d');
+      new Chart(ctx, {
+          type: 'line',
+          data: {
+              datasets: [{
+                  data: data,
+                  borderColor: "rgba(93,  165, 218, 1)",
+                  pointBackgroundColor: "rgba(93,  165, 218, 0.9)",
+                  backgroundColor: "rgba(93,  165, 218, 0.5)",
+              }]
+          },
+          options: {
+              legend: { display: false },
+              scales: {
+                  xAxes: [{
+                      type: 'time',
+                      time: { unit: 'hour' }
+                  }],
+                  yAxes: [{ ticks: { beginAtZero: true } }]
+              }
+          }
+      });
+    }
+
+    $(function() {
+        queryData();
+    });
+
+  </script>
+
+</html>

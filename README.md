@@ -1,2 +1,3 @@
-# cc-tciot
-Causeway Coding - Things Connected IoT
+# Causeway Coding - Things Connected IoT
+
+This repository contains a lot of prototype code...
