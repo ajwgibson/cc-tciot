@@ -1,0 +1,22 @@
+<% dt_width = '4' if local_assigns[:dt_width].nil? %>
+<% dd_width = '8' if local_assigns[:dd_width].nil? %>
+<% url = false if local_assigns[:url].nil? %>
+
+<dl class="row mb-0">
+  <dt class="col-sm-<%= dt_width %> text-sm-right text-truncate"><%= label %></dt>
+  <dd class="col-sm-<%= dd_width %> text-sm-left">
+    <% if url %>
+      <a href="<%= value %>">
+        <i class="fas fa-link"></i> Click here
+      </a>
+    <% else %>
+      <%= value %>
+      <% if (value.class.name == 'String') && value.include?('@') %>
+        <a href="mailto:<%= value %>">
+          <i class="far fa-envelope"></i>
+        </a>
+      <% end %>
+    <% end %>
+    &nbsp;
+  </dd>
+</dl>
