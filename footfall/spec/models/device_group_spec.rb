@@ -32,4 +32,24 @@ RSpec.describe DeviceGroup, type: :model do
       expect(filtered).not_to include(@b)
     end
   end
+
+  describe 'scope:ordered_by_name' do
+    before(:each) do
+      @c = FactoryBot.create(:default_device_group, name: 'c')
+      @a = FactoryBot.create(:default_device_group, name: 'a')
+      @b = FactoryBot.create(:default_device_group, name: 'b')
+    end
+    it 'orders the records by name' do
+      expect(DeviceGroup.ordered_by_name).to eq([@a, @b, @c])
+    end
+  end
+
+  # METHODS
+  describe '#device_count' do
+    let(:device_group) { FactoryBot.create(:default_device_group) }
+    it 'returns the number of devices in the group' do
+      3.times { device_group.devices << FactoryBot.create(:default_device) }
+      expect(device_group.device_count).to eq(3)
+    end
+  end
 end

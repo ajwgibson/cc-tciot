@@ -54,6 +54,10 @@ RSpec.describe DevicesController, type: :controller do
       expect(Device).to receive(:with_device_id).with('xxx').and_return(devices)
       get :index, params: { with_device_id: 'xxx' }
     end
+    it "applies the 'with_device_group_id' filter" do
+      expect(Device).to receive(:with_device_group_id).with('xxx').and_return(devices)
+      get :index, params: { with_device_group_id: 'xxx' }
+    end
     context 'applies paging' do
       before(:each) do
         Kaminari.configure do |config|
@@ -112,17 +116,25 @@ RSpec.describe DevicesController, type: :controller do
   end
 
   describe 'GET #new' do
-    it 'renders a blank form' do
+    let(:device_groups) { double }
+    before(:each) do
+      allow(DeviceGroup).to receive(:ordered_by_name).and_return(device_groups)
       get :new
+    end
+    it 'renders a blank form' do
       expect(response).to render_template :edit
       expect(response).to have_http_status(:success)
       expect(assigns(:device).id).to be_nil
       expect(assigns(:title)).to eq('New device')
       expect(assigns(:cancel_path)).to eq(devices_path)
     end
+    it 'includes a list of device groups' do
+      expect(assigns(:device_groups)).to eq(device_groups)
+    end
   end
 
   describe 'POST #create' do
+    let(:device_group) { FactoryBot.create(:default_device_group) }
     context 'with valid data' do
       let(:device) { Device.order(:id).last }
       def post_create
@@ -134,7 +146,8 @@ RSpec.describe DevicesController, type: :controller do
           footfall_threshold_red: 2,
           battery_threshold_amber: 4,
           battery_threshold_red: 3,
-          notes: 'Some notes'
+          notes: 'Some notes',
+          device_group_id: device_group.id
         }
         post(:create, params: { device: attrs })
       end
@@ -175,6 +188,9 @@ RSpec.describe DevicesController, type: :controller do
       end
       it 'stores the notes' do
         expect(device.notes).to eq('Some notes')
+      end
+      it 'stores the device group' do
+        expect(device.device_group).to eq(device_group)
       end
     end
     context 'with invalid data' do

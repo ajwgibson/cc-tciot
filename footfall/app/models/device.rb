@@ -4,6 +4,8 @@ class Device < ApplicationRecord
 
   has_paper_trail
 
+  belongs_to :device_group, optional: true
+
   # CALLBACKS
   before_save :reorder_thresholds
 
@@ -27,7 +29,9 @@ class Device < ApplicationRecord
   }
 
   # SCOPES
+  scope :ordered_by_device_id, -> { order(:device_id) }
   scope :with_device_id, ->(value) { where('lower(device_id) like lower(?)', "%#{value}%")}
+  scope :with_device_group_id, ->(value) { where(device_group_id: value) }
 
   # METHODS
   def location_as_string

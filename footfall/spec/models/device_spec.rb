@@ -89,6 +89,17 @@ RSpec.describe Device, type: :model do
   end
 
   # SCOPES
+  describe 'scope:ordered_by_device_id' do
+    before(:each) do
+      @c = FactoryBot.create(:default_device, device_id: 'c')
+      @a = FactoryBot.create(:default_device, device_id: 'a')
+      @b = FactoryBot.create(:default_device, device_id: 'b')
+    end
+    it 'orders the records by device_id' do
+      expect(Device.ordered_by_device_id).to eq([@a, @b, @c])
+    end
+  end
+
   describe 'scope:with_device_id' do
     before(:each) do
       @a = FactoryBot.create(:default_device, device_id: 'x')
@@ -99,6 +110,19 @@ RSpec.describe Device, type: :model do
       filtered = Device.with_device_id('x')
       expect(filtered).to     include(@a, @c)
       expect(filtered).not_to include(@b)
+    end
+  end
+
+  describe 'scope:with_device_group_id' do
+    let(:device_group) { FactoryBot.create(:default_device_group) }
+    before(:each) do
+      @a = FactoryBot.create(:default_device, device_group: nil)
+      @b = FactoryBot.create(:default_device, device_group: device_group)
+    end
+    it 'includes records where the device belongs to the group' do
+      filtered = Device.with_device_group_id(device_group.id)
+      expect(filtered).to     include(@b)
+      expect(filtered).not_to include(@a)
     end
   end
 

@@ -61,7 +61,7 @@
             <% @device_groups.each do |device_group| %>
             <tr>
               <td><%= device_group.name %></td>
-              <td>TODO</td>
+              <td><%= device_group.device_count %></td>
               <td class="text-right">
                 <%= link_to device_group_path(device_group), class: "btn btn-primary btn-xs" do %>
                   <i class="fa fa-folder-open"></i> View
@@ -82,7 +82,7 @@
           </div>
           <strong><%= device_group.name %></strong><br/>
           <small>
-            TODO: more info
+            <%= pluralize(device_group.device_count, 'device') %>
           </small>
         </li>
         <% end %>

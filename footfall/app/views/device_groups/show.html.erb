@@ -8,14 +8,34 @@
         </div>
         <div class="ibox-content">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <%= render partial: 'show_detail_row', locals: { label: "Name", value: @device_group.name } %>
 
               <dl class="row mb-0">
                 <div class="col-sm-4 text-sm-right"><dt>Notes</dt> </div>
                 <div class="col-sm-8 text-sm-left">
                   <dd class="mb-1">
-                  <%= simple_format(@device_group.notes) %> &nbsp;
+                    <%= simple_format(@device_group.notes) %>
+                  </dd>
+                </div>
+              </dl>
+
+              <dl class="row mb-0">
+                <div class="col-sm-4 text-sm-right"><dt>Devices</dt> </div>
+                <div class="col-sm-8 text-sm-left">
+                  <dd class="mb-1">
+                    <ul class="list-unstyled">
+                      <% @device_group.devices.ordered_by_device_id.each do |device| %>
+                        <li>
+                          <%= device.device_id %>
+                          <small>
+                            <%= link_to device_path(device) do %>
+                              <i class="fa fa-folder-open"></i> View
+                            <% end %>
+                          </small>
+                        </li>
+                      <% end %>
+                    </ul>
                   </dd>
                 </div>
               </dl>

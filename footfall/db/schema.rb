@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_163212) do
+ActiveRecord::Schema.define(version: 2020_04_15_193211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2020_04_15_163212) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "device_group_id"
+    t.index ["device_group_id"], name: "index_devices_on_device_group_id"
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true
   end
 
@@ -93,4 +95,5 @@ ActiveRecord::Schema.define(version: 2020_04_15_163212) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "devices", "device_groups"
 end

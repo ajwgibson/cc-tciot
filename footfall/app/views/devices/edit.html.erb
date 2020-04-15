@@ -20,6 +20,13 @@
             </div>
 
             <div class="row">
+              <div class="col-sm-6">
+                <%= f.collection_select :device_group_id, @device_groups, :id, :name,
+                      { label: 'Project', include_blank: 'Select a device group if appropriate...' } %>
+              </div>
+            </div>
+
+            <div class="row">
               <div class="col-sm">
                 <%= f.text_field :latitude,  :label => 'Latitude' %>
               </div>

@@ -3,10 +3,12 @@
 class DevicesController < ApplicationController
   load_and_authorize_resource
 
+  before_action :set_device_groups, except: [:clear_filter, :destroy]
+
   def index
     @filter = get_filter
     @title = 'Devices'
-    @devices = Device.filter(@filter).order(:device_id)
+    @devices = Device.left_outer_joins(:device_group).filter(@filter).order(:device_id)
     @devices = @devices.page(params[:page])
     set_filter @filter
   end
@@ -71,7 +73,8 @@ class DevicesController < ApplicationController
         :footfall_threshold_amber,
         :battery_threshold_red,
         :battery_threshold_amber,
-        :notes
+        :notes,
+        :device_group_id
       )
   end
 
@@ -80,7 +83,8 @@ class DevicesController < ApplicationController
       params
       .permit(
         :order_by,
-        :with_device_id
+        :with_device_id,
+        :with_device_group_id
       ).to_h
     filter = session[:filter_devices].symbolize_keys! if filter.empty? && session.key?(:filter_devices)
     filter[:order_by] = 'device_id' unless filter.key?(:order_by)
@@ -90,5 +94,9 @@ class DevicesController < ApplicationController
   def set_filter(filter)
     session[:filter_devices] = filter unless filter.nil?
     session.delete(:filter_devices) if filter.nil?
+  end
+
+  def set_device_groups
+    @device_groups = DeviceGroup.ordered_by_name
   end
 end

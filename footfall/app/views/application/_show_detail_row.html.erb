@@ -16,6 +16,13 @@
           <i class="far fa-envelope"></i>
         </a>
       <% end %>
+      <% unless local_assigns[:details].nil? %>
+        <small>
+          <a href="<%= details %>">
+            <i class="far fa-folder-open"></i> View
+          </a>
+        </small>
+      <% end %>
     <% end %>
     &nbsp;
   </dd>

@@ -8,8 +8,14 @@
         </div>
         <div class="ibox-content">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <%= render partial: 'show_detail_row', locals: { label: "Device ID", value: @device.device_id } %>
+
+              <%= render partial: 'show_detail_row', locals: {
+                    label: "Device group",
+                    value: @device&.device_group&.name,
+                    details: @device.device_group.nil? ? nil : device_group_path(@device.device_group)
+                  } %>
 
               <%= render partial: 'show_detail_row', locals: { label: "Location", value: @device.location_as_string } %>
 
