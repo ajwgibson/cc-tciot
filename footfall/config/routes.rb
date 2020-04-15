@@ -17,4 +17,7 @@ Rails.application.routes.draw do
   get 'audits',             as: 'audits', to: 'audits#index'
   get 'audits/clear_filter'
   get 'audits/:id',         as: 'audit',  to: 'audits#show'
+
+  get 'devices/clear_filter'
+  resources :devices
 end

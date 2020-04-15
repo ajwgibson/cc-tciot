@@ -25,6 +25,12 @@
         <% end %>
       </li>
 
+      <li class="<%= 'active' if 'devices' == controller.controller_name %>">
+        <%= link_to devices_path do %>
+          <i class="fas fa-upload"></i> <span class="nav-label">Devices</span>
+        <% end %>
+      </li>
+
       <li class="<%= 'active' if (
           ['users', 'audits', 'background_tasks', 'settings']
           .include?(controller.controller_name)
