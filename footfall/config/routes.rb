@@ -20,4 +20,7 @@ Rails.application.routes.draw do
 
   get 'devices/clear_filter'
   resources :devices
+
+  get 'device_groups/clear_filter'
+  resources :device_groups
 end
