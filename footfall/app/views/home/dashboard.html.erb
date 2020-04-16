@@ -1,3 +1,268 @@
-<div class="wrapper wrapper-content animated fadeInRight mb-4">
-  <p>This will be the dashboard...</p>
+<div class="wrapper wrapper-content animated fadeInRight mb-4" id="vue-app">
+
+  <div class="row">
+    <div class="col-12 text-right">
+      <span style="margin-right: 20px;">
+        <%= image_tag("spinner.gif", id: "spinner", class: "img-responsive collapse", alt: "spinner") %>
+      </span>
+      <a class="btn btn-default btn-xs"
+          data-toggle="collapse" data-target="#settings">
+        <i class="fa fa-gear"></i> Settings
+        <span class="caret"></span>
+      </a>
+      <div class="ibox collapse mt-2" id="settings">
+        <div class="ibox-content">
+          <div class="row justify-content-end">
+            <div class="col-sm-4">
+              <div class="well">
+                  <%= bootstrap_form_tag url: root_path, method: :get do |f| %>
+                  <div class="form-group">
+                    <label for="interval">Refresh interval</label>
+                    <select id="interval" name="interval" class="form-control" v-model="interval">
+                      <option value="-1"> Refresh off </option>
+                      <option value="10000"> Every 10 seconds </option>
+                      <option value="20000"> Every 20 seconds </option>
+                      <option value="30000"> Every 30 seconds </option>
+                      <option value="60000"> Every 60 seconds </option>
+                    </select>
+                  </div>
+                  <%= button_tag(type: "submit", class: "btn btn-default") do %>
+                    <i class="fa fa-check"></i> Apply
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="widget-head-color-box red-bg p-lg text-center">
+        <div class="m-b-md">
+          <i class="fa fa-bell fa-5x"></i>
+          <h1 class="m-xs">17</h1>
+          <h3 class="font-bold no-margins">
+            Unresolved alarms
+          </h3>
+        </div>
+      </div>
+      <div class="widget-text-box">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="widget-head-color-box navy-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-shoe-prints fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{footfall_green}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_footfall_status: 'green') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="widget-head-color-box yellow-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-shoe-prints fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{footfall_amber}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_footfall_status: 'amber') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="widget-head-color-box red-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-shoe-prints fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{footfall_red}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_footfall_status: 'red') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="widget-head-color-box navy-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-battery-full fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{battery_green}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_battery_status: 'green') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="widget-head-color-box yellow-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-battery-half fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{battery_amber}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_battery_status: 'amber') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="widget-head-color-box red-bg p-md">
+            <div class="row">
+              <div class="col-4">
+                <i class="fas fa-battery-empty fa-5x"></i>
+              </div>
+              <div class="col-8 text-right">
+                <h2 class="font-bold mt-0">{{battery_red}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to devices_path(with_battery_status: 'red') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<%= javascript_include_tag "https://cdn.jsdelivr.net/npm/vue" %>
+<%= javascript_include_tag "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" %>
+
+<%= javascript_tag do %>
+
+  var app = new Vue({
+    el: '#vue-app',
+
+    data: {
+      footfall_red: '<%= @footfall_red %>',
+      footfall_amber: '<%= @footfall_amber %>',
+      footfall_green: '<%= @footfall_green %>',
+      battery_red: '<%= @battery_red %>',
+      battery_amber: '<%= @battery_amber %>',
+      battery_green: '<%= @battery_green %>',
+
+      timer: null,
+      interval: <%= @interval %>
+    },
+
+    created: function() {
+      var self = this;
+      this.timer = setInterval(function() {
+        self.refreshCounters();
+      }, self.interval);
+    },
+
+    methods: {
+      refreshCounters: function() {
+        $("#spinner").show();
+
+        axios
+          .get('<%= root_path(format: :json) %>')
+          .then(response => {
+            this.footfall_red   = response.data.footfall_red;
+            this.footfall_amber = response.data.footfall_amber;
+            this.footfall_green = response.data.footfall_green;
+
+            this.battery_red   = response.data.battery_red;
+            this.battery_amber = response.data.battery_amber;
+            this.battery_green = response.data.battery_green;
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .then(() => {
+            $("#spinner").hide();
+          });
+      },
+
+      doAlert: function(text, type) {
+        swal("Attention!", text, type);
+      }
+    },
+
+    watch: {
+      footfall_red: function(newValue, oldValue) {
+        if (newValue > oldValue) {
+          this.doAlert("A new footfall red alert has been raised!", "error");
+        }
+      },
+
+      footfall_amber: function(newValue, oldValue) {
+        if (newValue > oldValue) {
+          this.doAlert("A new footfall amber alert has been raised!", "warning");
+        }
+      },
+
+      battery_red: function(newValue, oldValue) {
+        if (newValue > oldValue) {
+          this.doAlert("A new battery red alert has been raised!", "error");
+        }
+      },
+
+      battery_amber: function(newValue, oldValue) {
+        if (newValue > oldValue) {
+          this.doAlert("A new battery amber alert has been raised!", "warning");
+        }
+      }
+    }
+  });
+
+<% end %>
