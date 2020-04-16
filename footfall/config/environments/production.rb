@@ -105,6 +105,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Custom config
+  config.x.google.maps_api_key = ENV['FOOTFALL_GOOGLE_MAPS_API_KEY']
 end
 
 Rails.application.routes.default_url_options[:host] = ENV['FOOTFALL_HOST']
