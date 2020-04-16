@@ -127,6 +127,20 @@ RSpec.describe Device, type: :model do
   end
 
   # METHODS
+  describe 'self.new_device' do
+    before(:each) do
+      FactoryBot.create(:default_settings)
+    end
+    it 'initializes a device using system settings for defaults' do
+      device = Device.new_device
+      settings = Settings.current
+      expect(device.battery_threshold_red).to eq(settings.default_battery_threshold_red)
+      expect(device.battery_threshold_amber).to eq(settings.default_battery_threshold_amber)
+      expect(device.footfall_threshold_red).to eq(settings.default_footfall_threshold_red)
+      expect(device.footfall_threshold_amber).to eq(settings.default_footfall_threshold_amber)
+    end
+  end
+
   describe '#location_as_string' do
     it 'returns latitude and longitude' do
       device = FactoryBot.build(:default_device, latitude: 1.23, longitude: -9.87)

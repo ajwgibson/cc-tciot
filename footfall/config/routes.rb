@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   get 'audits/clear_filter'
   get 'audits/:id',         as: 'audit',  to: 'audits#show'
 
+  get  'settings',        as: 'settings',        to: 'settings#show'
+  get  'settings/edit',   as: 'edit_settings',   to: 'settings#edit'
+  post 'settings/update', as: 'update_settings', to: 'settings#update'
+
   get 'devices/clear_filter'
   resources :devices
 

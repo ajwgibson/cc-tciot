@@ -22,7 +22,7 @@
             <div class="row">
               <div class="col-sm-6">
                 <%= f.collection_select :device_group_id, @device_groups, :id, :name,
-                      { label: 'Project', include_blank: 'Select a device group if appropriate...' } %>
+                      { label: 'Device group', include_blank: 'Select a device group if appropriate...' } %>
               </div>
             </div>
 
@@ -39,12 +39,12 @@
               <div class="col-sm">
                 <%= f.number_field :footfall_threshold_amber,
                       label: 'Footfall amber warning threshold',
-                      min: 1, max: 99, step: 1 %>
+                      min: 1, max: 999, step: 1 %>
               </div>
               <div class="col-sm">
                 <%= f.number_field :footfall_threshold_red,
                       label: 'Footfall red warning threshold',
-                      min: 1, max: 99, step: 1 %>
+                      min: 1, max: 999, step: 1 %>
               </div>
             </div>
 

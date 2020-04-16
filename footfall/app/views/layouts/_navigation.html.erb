@@ -53,6 +53,9 @@
           <li class="<%= 'active' if (controller.controller_name == 'audits') %>">
             <%= link_to 'Audited events', audits_path %>
           </li>
+          <li class="<%= 'active' if (controller.controller_name == 'settings') %>">
+            <%= link_to 'System settings', settings_path %>
+          </li>
         </ul>
       </li>
 

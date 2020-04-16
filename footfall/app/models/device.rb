@@ -34,6 +34,16 @@ class Device < ApplicationRecord
   scope :with_device_group_id, ->(value) { where(device_group_id: value) }
 
   # METHODS
+  def self.new_device
+    settings = Settings.current
+    Device.new(
+      battery_threshold_red:    settings.default_battery_threshold_red,
+      battery_threshold_amber:  settings.default_battery_threshold_amber,
+      footfall_threshold_red:   settings.default_footfall_threshold_red,
+      footfall_threshold_amber: settings.default_footfall_threshold_amber
+    )
+  end
+
   def location_as_string
     "#{latitude}, #{longitude}" unless latitude.blank? || longitude.blank?
   end

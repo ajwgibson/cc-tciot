@@ -23,7 +23,7 @@ class DevicesController < ApplicationController
   end
 
   def new
-    @device = Device.new
+    @device = Device.new_device
     @title = 'New device'
     @cancel_path = devices_path
     render :edit
