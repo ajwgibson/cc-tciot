@@ -204,6 +204,8 @@
     },
 
     created: function() {
+      if (this.interval <= 0) return;
+
       var self = this;
       this.timer = setInterval(function() {
         self.refreshCounters();
