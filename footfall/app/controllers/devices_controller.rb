@@ -74,7 +74,9 @@ class DevicesController < ApplicationController
         :battery_threshold_red,
         :battery_threshold_amber,
         :notes,
-        :device_group_id
+        :device_group_id,
+        :footfall,
+        :battery
       )
   end
 
@@ -84,7 +86,9 @@ class DevicesController < ApplicationController
       .permit(
         :order_by,
         :with_device_id,
-        :with_device_group_id
+        :with_device_group_id,
+        :with_battery_status,
+        :with_footfall_status
       ).to_h
     filter = session[:filter_devices].symbolize_keys! if filter.empty? && session.key?(:filter_devices)
     filter[:order_by] = 'device_id' unless filter.key?(:order_by)

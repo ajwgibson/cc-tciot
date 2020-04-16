@@ -19,6 +19,9 @@
 
               <%= render partial: 'show_detail_row', locals: { label: "Location", value: @device.location_as_string } %>
 
+              <%= render partial: 'show_detail_row', locals: { label: "Footfall", value: device_footfall_status(@device) } %>
+              <%= render partial: 'show_detail_row', locals: { label: "Battery", value: device_battery_status(@device) } %>
+
               <%= render partial: 'show_detail_row', locals: {
                     label: "Footfall amber warning threshold",
                     value: @device.footfall_threshold_amber

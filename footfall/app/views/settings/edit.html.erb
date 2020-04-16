@@ -30,11 +30,13 @@
                 <div class="col-sm">
                   <%= f.number_field :default_battery_threshold_amber,
                         label: 'Battery amber warning threshold',
+                        append: '%',
                         min: 1, max: 99, step: 1 %>
                 </div>
                 <div class="col-sm">
                   <%= f.number_field :default_battery_threshold_red,
                         label: 'Battery red warning threshold',
+                        append: '%',
                         min: 1, max: 99, step: 1 %>
                 </div>
               </div>

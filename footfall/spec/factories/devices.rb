@@ -10,5 +10,8 @@ FactoryBot.define do
 
     battery_threshold_amber   {  50 }
     battery_threshold_red     {  30 }
+
+    footfall { rand(0..200) }
+    battery  { rand(0..100) }
   end
 end

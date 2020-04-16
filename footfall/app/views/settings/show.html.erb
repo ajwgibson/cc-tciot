@@ -20,13 +20,13 @@
           <%=
             render partial: 'show_detail_row', locals: {
               label: "Battery amber warning threshold",
-              value: @settings.default_battery_threshold_amber
+              value: "#{@settings.default_battery_threshold_amber}%"
             }
           %>
           <%=
             render partial: 'show_detail_row', locals: {
               label: "Battery red warning threshold",
-              value: @settings.default_battery_threshold_red
+              value: "#{@settings.default_battery_threshold_red}%"
             }
           %>
         </div>

@@ -33,6 +33,32 @@ class Device < ApplicationRecord
   scope :with_device_id, ->(value) { where('lower(device_id) like lower(?)', "%#{value}%")}
   scope :with_device_group_id, ->(value) { where(device_group_id: value) }
 
+  def self.with_battery_status(value)
+    return Device.where('battery > battery_threshold_amber') if 'green'.eql?(value)
+
+    if 'amber'.eql?(value)
+      return Device.where('battery > battery_threshold_red and battery <= battery_threshold_amber')
+    end
+
+    Device.where('battery <= battery_threshold_red')
+  end
+
+  def self.with_footfall_status(value)
+    return Device.where('footfall < footfall_threshold_amber') if 'green'.eql?(value)
+
+    if 'amber'.eql?(value)
+      return Device.where(
+        'footfall < footfall_threshold_red and footfall >= footfall_threshold_amber'
+      )
+    end
+
+    Device.where('footfall >= footfall_threshold_red')
+  end
+
+  def self.status_values
+    ['red', 'amber', 'green']
+  end
+
   # METHODS
   def self.new_device
     settings = Settings.current

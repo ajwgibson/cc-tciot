@@ -35,6 +35,30 @@
                             { prompt: "Please select a device group...", class: 'form-control' } %>
                     </div>
                   </div>
+                  <div class="col-sm">
+                    <div class="form-group">
+                      <%= label_tag :with_footfall_status, 'Find devices with footfall status...', :class => 'control-label' %>
+                      <%= select_tag :with_footfall_status,
+                            options_from_collection_for_select(
+                              Device.status_values,
+                              :to_s,
+                              proc { |t| t.humanize },
+                              @filter[:with_footfall_status]
+                            ),
+                            { prompt: "Please select a status...", class: 'form-control' } %>
+                    </div>
+                    <div class="form-group">
+                      <%= label_tag :with_battery_status, 'Find devices with battery status...', :class => 'control-label' %>
+                      <%= select_tag :with_battery_status,
+                            options_from_collection_for_select(
+                              Device.status_values,
+                              :to_s,
+                              proc { |t| t.humanize },
+                              @filter[:with_battery_status]
+                            ),
+                            { prompt: "Please select a status...", class: 'form-control' } %>
+                    </div>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col">
@@ -61,8 +85,8 @@
               <th><%= sortable 'device_id', @filter, devices_path, 'Device ID' %></th>
               <th><%= sortable 'device_groups.name', @filter, devices_path, 'Device group' %></th>
               <th>Location</th>
-              <th>Footfall status</th>
-              <th>Battery status</th>
+              <th>Footfall</th>
+              <th>Battery</th>
               <th></th>
             </tr>
           </thead>
@@ -72,8 +96,8 @@
               <td><%= device.device_id %></td>
               <td><%= device&.device_group&.name %></td>
               <td><%= device.location_as_string %></td>
-              <td>TODO</td>
-              <td>TODO</td>
+              <td><%= device_footfall_status(device) %></td>
+              <td><%= device_battery_status(device) %></td>
               <td class="text-right">
                 <%= link_to device_path(device), class: "btn btn-primary btn-xs" do %>
                   <i class="fa fa-folder-open"></i> View
@@ -94,8 +118,7 @@
           </div>
           <strong><%= device.device_id %></strong><br/>
           <small>
-            <%= device.location_as_string %><br>
-            TODO: more info
+            <%= device_footfall_status(device) %> <%= device_battery_status(device) %>
           </small>
         </li>
         <% end %>

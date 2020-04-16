@@ -126,6 +126,94 @@ RSpec.describe Device, type: :model do
     end
   end
 
+  describe 'self.with_battery_status' do
+    context 'when the parameter passed is green' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, battery: 91, battery_threshold_amber: 90)
+        @b = FactoryBot.create(:default_device, battery: 90, battery_threshold_amber: 90)
+      end
+      it 'returns devices with battery more than the amber threshold' do
+        results = Device.with_battery_status('green')
+        expect(results).to eq([@a])
+      end
+    end
+    context 'when the parameter passed is amber' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, battery: 91, battery_threshold_amber: 90)
+        @b = FactoryBot.create(:default_device, battery: 90, battery_threshold_amber: 90)
+        @c = FactoryBot.create(
+          :default_device,
+          battery: 89,
+          battery_threshold_amber: 90,
+          battery_threshold_red: 89
+        )
+      end
+      it 'returns devices with battery > the red threshold and <= the amber threshold' do
+        results = Device.with_battery_status('amber')
+        expect(results).to eq([@b])
+      end
+    end
+    context 'when the parameter passed is red' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, battery: 90, battery_threshold_amber: 90)
+        @b = FactoryBot.create(
+          :default_device,
+          battery: 89,
+          battery_threshold_amber: 90,
+          battery_threshold_red: 89
+        )
+      end
+      it 'returns devices with battery <= the red threshold' do
+        results = Device.with_battery_status('red')
+        expect(results).to eq([@b])
+      end
+    end
+  end
+
+  describe 'self.with_footfall_status' do
+    context 'when the parameter passed is green' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, footfall:  1, footfall_threshold_amber: 10)
+        @b = FactoryBot.create(:default_device, footfall: 10, footfall_threshold_amber: 10)
+      end
+      it 'returns devices with footfall less than the amber threshold' do
+        results = Device.with_footfall_status('green')
+        expect(results).to eq([@a])
+      end
+    end
+    context 'when the parameter passed is amber' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, footfall:  1, footfall_threshold_amber: 10)
+        @b = FactoryBot.create(:default_device, footfall: 10, footfall_threshold_amber: 10)
+        @c = FactoryBot.create(
+          :default_device,
+          footfall: 11,
+          footfall_threshold_amber: 10,
+          footfall_threshold_red: 11
+        )
+      end
+      it 'returns devices with footfall < the red threshold and >= the amber threshold' do
+        results = Device.with_footfall_status('amber')
+        expect(results).to eq([@b])
+      end
+    end
+    context 'when the parameter passed is red' do
+      before(:each) do
+        @a = FactoryBot.create(:default_device, footfall: 10, footfall_threshold_amber: 10)
+        @b = FactoryBot.create(
+          :default_device,
+          footfall: 11,
+          footfall_threshold_amber: 10,
+          footfall_threshold_red: 11
+        )
+      end
+      it 'returns devices with footfall >= the red threshold' do
+        results = Device.with_footfall_status('red')
+        expect(results).to eq([@b])
+      end
+    end
+  end
+
   # METHODS
   describe 'self.new_device' do
     before(:each) do

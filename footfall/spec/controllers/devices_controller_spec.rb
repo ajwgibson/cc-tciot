@@ -58,6 +58,14 @@ RSpec.describe DevicesController, type: :controller do
       expect(Device).to receive(:with_device_group_id).with('xxx').and_return(devices)
       get :index, params: { with_device_group_id: 'xxx' }
     end
+    it "applies the 'with_battery_status' filter" do
+      expect(Device).to receive(:with_battery_status).with('xxx').and_return(devices)
+      get :index, params: { with_battery_status: 'xxx' }
+    end
+    it "applies the 'with_footfall_status' filter" do
+      expect(Device).to receive(:with_footfall_status).with('xxx').and_return(devices)
+      get :index, params: { with_footfall_status: 'xxx' }
+    end
     context 'applies paging' do
       before(:each) do
         Kaminari.configure do |config|
@@ -147,7 +155,9 @@ RSpec.describe DevicesController, type: :controller do
           battery_threshold_amber: 4,
           battery_threshold_red: 3,
           notes: 'Some notes',
-          device_group_id: device_group.id
+          device_group_id: device_group.id,
+          footfall: 10,
+          battery: 11
         }
         post(:create, params: { device: attrs })
       end
@@ -191,6 +201,12 @@ RSpec.describe DevicesController, type: :controller do
       end
       it 'stores the device group' do
         expect(device.device_group).to eq(device_group)
+      end
+      it 'stores the footfall' do
+        expect(device.footfall).to eq(10)
+      end
+      it 'stores the battery' do
+        expect(device.battery).to eq(11)
       end
     end
     context 'with invalid data' do
