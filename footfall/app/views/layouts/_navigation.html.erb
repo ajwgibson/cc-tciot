@@ -37,6 +37,12 @@
         <% end %>
       </li>
 
+      <li class="<%= 'active' if 'device_data_records' == controller.controller_name %>">
+        <%= link_to device_data_records_path do %>
+          <i class="fas fa-stream"></i> <span class="nav-label">Device records</span>
+        <% end %>
+      </li>
+
       <li class="<%= 'active' if (
           ['users', 'audits', 'background_tasks', 'settings']
           .include?(controller.controller_name)

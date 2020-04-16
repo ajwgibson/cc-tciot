@@ -18,6 +18,7 @@
 //= require pace/pace.min.js
 //= require slimscroll/jquery.slimscroll.min.js
 //= require metisMenu/jquery.metisMenu.js
+//= require datepicker/bootstrap-datepicker.js
 //= require chartjs/Chart.bundle.min.js
 //= require toastr/toastr.min.js
 //= require toastr_config
@@ -61,4 +62,20 @@ $(function () {
 
   $("form[data-warn]").submit(warn);
   $("button[data-warn]").click(warn);
+
+  //
+  // Date picker inputs
+  //
+
+  $('.datepicker').datepicker({
+    format: "dd/mm/yyyy",
+    startView: "days",
+    todayBtn: true,
+    clearBtn: true,
+    todayHighlight: true,
+    keyboardNavigation: false,
+    forceParse: false,
+    autoclose: true,
+    weekStart: 1,
+  });
 });

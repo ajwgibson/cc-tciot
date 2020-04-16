@@ -27,4 +27,7 @@ Rails.application.routes.draw do
 
   get 'device_groups/clear_filter'
   resources :device_groups
+
+  get 'device_data_records/clear_filter'
+  resources :device_data_records, only: [:index, :destroy]
 end

@@ -30,4 +30,18 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  date:
+    formats:
+      short: "%d/%m/%Y"
+      timeline: "%B %d, %Y"
+      short_human: "%d %b"
+  time:
+    formats:
+      short: "%d/%m/%Y %H:%M"
+      long: "%d/%m/%Y %H:%M:%S"
+      date:  "%d/%m/%Y"
+      time:  "%H:%M"
+  number:
+     currency:
+        format:
+          unit: '£'

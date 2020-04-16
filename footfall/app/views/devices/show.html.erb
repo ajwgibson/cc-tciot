@@ -68,6 +68,15 @@
               </div>
               <% end %>
 
+              <% if can? :manage, DeviceDataRecord %>
+              <div>
+                <%= link_to device_data_records_path(with_device_id: @device.device_id),
+                      :class => 'btn btn-outline btn-block btn-success mb-2' do %>
+                  <i class="fas fa-stream"></i> View device records
+                <% end %>
+              </div>
+              <% end %>
+
               <% if can? :manage, Audit %>
               <div>
                 <%= link_to audits_path_for(@device), :class => 'btn btn-outline btn-block btn-info mb-2' do %>
