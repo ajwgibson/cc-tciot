@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_16_112042) do
+ActiveRecord::Schema.define(version: 2020_04_16_201146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,10 @@ ActiveRecord::Schema.define(version: 2020_04_16_112042) do
     t.integer "default_battery_threshold_red", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "default_latitude", precision: 10, scale: 6, default: "54.607577", null: false
+    t.decimal "default_longitude", precision: 10, scale: 6, default: "-6.693145", null: false
+    t.integer "default_zoom_no_location", default: 8, null: false
+    t.integer "default_zoom_specific_location", default: 12, null: false
   end
 
   create_table "users", force: :cascade do |t|

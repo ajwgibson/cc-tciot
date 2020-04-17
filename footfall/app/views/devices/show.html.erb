@@ -19,12 +19,7 @@
 
               <%= render partial: 'show_detail_row', locals: { label: "Location", value: @device.location_as_string } %>
 
-              <dl class="row mb-4">
-                <div class="col-sm-4 text-sm-right"> </div>
-                <div class="col-sm-8 text-sm-left">
-                  <div id="map" style="width: 100%; height: 400px;"></div>
-                </div>
-              </dl>
+              <div id="map" class="mt-2 mb-4" style="width: 100%; height: 400px;"></div>
 
               <%= render partial: 'show_detail_row', locals: { label: "Footfall", value: device_footfall_status(@device) } %>
               <%= render partial: 'show_detail_row', locals: { label: "Battery", value: device_battery_status(@device) } %>
@@ -49,13 +44,11 @@
                     value: "#{@device.battery_threshold_red}%"
                   } %>
 
-              <dl class="row mb-0">
-                <div class="col-sm-4 text-sm-right"><dt>Notes</dt> </div>
-                <div class="col-sm-8 text-sm-left">
-                  <dd class="mb-1">
-                  <%= simple_format(@device.notes) %> &nbsp;
-                  </dd>
-                </div>
+              <dl class="mb-0">
+                <dt>Notes</dt>
+                <dd class="mb-1">
+                <%= simple_format(@device.notes) %> &nbsp;
+                </dd>
               </dl>
             </div>
           </div>
@@ -146,12 +139,12 @@
   var map;
 
   function initMap() {
-    let center = { lat: 55.013479, lng: -6.469507 };
-    let zoom = 8;
+    let center = { lat: <%= @settings.default_latitude %>, lng: <%= @settings.default_longitude %> };
+    let zoom = <%= @settings.default_zoom_no_location %>;
 
     <% if @device.latitude.present? && @device.longitude.present? %>
     center = { lat: <%= @device.latitude %>, lng: <%= @device.longitude %> };
-    zoom = 12;
+    zoom = <%= @settings.default_zoom_specific_location %>;
     <% end %>
 
     map = new google.maps.Map(

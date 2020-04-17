@@ -21,13 +21,11 @@
             <%= render partial: 'show_detail_row', locals: { label: "Last sign-in", value: @user.current_sign_in_at } %>
             <%= render partial: 'show_detail_row', locals: { label: "Sign-in count", value: @user.sign_in_count } %>
 
-            <dl class="row mb-0">
-              <div class="col-sm-4 text-sm-right"><dt>Profile picture</dt> </div>
-              <div class="col-sm-8 text-sm-left">
-                <dd class="mb-1">
-                <%= image_tag(url_for(@user.profile_picture), class: "img-fluid border") if @user.profile_picture.attached? %> &nbsp;
-                </dd>
-              </div>
+            <dl class="mb-0">
+              <dt>Profile picture</dt>
+              <dd class="mb-1">
+              <%= image_tag(url_for(@user.profile_picture), class: "img-fluid border") if @user.profile_picture.attached? %> &nbsp;
+              </dd>
             </dl>
           </div>
         </div>

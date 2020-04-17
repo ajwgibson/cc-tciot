@@ -67,6 +67,18 @@ RSpec.describe SettingsController, type: :controller do
           expect(settings.default_battery_threshold_red).to(
             eq(attrs[:default_battery_threshold_red])
           )
+          expect(settings.default_latitude).to(
+            eq(attrs[:default_latitude])
+          )
+          expect(settings.default_longitude).to(
+            eq(attrs[:default_longitude])
+          )
+          expect(settings.default_zoom_no_location).to(
+            eq(attrs[:default_zoom_no_location])
+          )
+          expect(settings.default_zoom_specific_location).to(
+            eq(attrs[:default_zoom_specific_location])
+          )
         end
       end
       context 'with invalid data' do

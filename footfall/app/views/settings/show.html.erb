@@ -4,31 +4,61 @@
     <div class="col-lg-9">
       <div class="ibox ">
         <div class="ibox-content">
-          <h4 class="my-3">Device defaults</h4>
-          <%=
-            render partial: 'show_detail_row', locals: {
-              label: "Footfall amber warning threshold",
-              value: @settings.default_footfall_threshold_amber
-            }
-          %>
-          <%=
-            render partial: 'show_detail_row', locals: {
-              label: "Footfall red warning threshold",
-              value: @settings.default_footfall_threshold_red
-            }
-          %>
-          <%=
-            render partial: 'show_detail_row', locals: {
-              label: "Battery amber warning threshold",
-              value: "#{@settings.default_battery_threshold_amber}%"
-            }
-          %>
-          <%=
-            render partial: 'show_detail_row', locals: {
-              label: "Battery red warning threshold",
-              value: "#{@settings.default_battery_threshold_red}%"
-            }
-          %>
+          <fieldset class="mb-4">
+            <legend class="mb-3 border-bottom">Device defaults</legend>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Footfall amber warning threshold",
+                value: @settings.default_footfall_threshold_amber
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Footfall red warning threshold",
+                value: @settings.default_footfall_threshold_red
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Battery amber warning threshold",
+                value: "#{@settings.default_battery_threshold_amber}%"
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Battery red warning threshold",
+                value: "#{@settings.default_battery_threshold_red}%"
+              }
+            %>
+          </fieldset>
+
+          <fieldset class="mb-4">
+            <legend class="mb-3 border-bottom">Mapping defaults</legend>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Default map centre latitude",
+                value: @settings.default_latitude
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Default map centre longitude",
+                value: @settings.default_longitude
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Default map zoom when no specific location selected",
+                value: @settings.default_zoom_no_location
+              }
+            %>
+            <%=
+              render partial: 'show_detail_row', locals: {
+                label: "Default map zoom when a specific location is selected",
+                value: @settings.default_zoom_specific_location
+              }
+            %>
+          </fieldset>
         </div>
       </div>
     </div>

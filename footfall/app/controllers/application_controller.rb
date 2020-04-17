@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_paper_trail_whodunnit
+  before_action :get_current_settings
 
   protected
 
@@ -24,6 +25,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def get_current_settings
+    @settings = Settings.current
+  end
 
   def fix_filter_dates_to_date(filter, key)
     filter[key] = Date.strptime(filter[key], '%d/%m/%Y') unless filter[key].blank?

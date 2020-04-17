@@ -125,12 +125,12 @@
   var marker = null;
 
   function initMap() {
-    let center = { lat: 55.013479, lng: -6.469507 };
-    let zoom = 8;
+    let center = { lat: <%= @settings.default_latitude %>, lng: <%= @settings.default_longitude %> };
+    let zoom = <%= @settings.default_zoom_no_location %>;
 
     <% if @device.latitude.present? && @device.longitude.present? %>
     center = { lat: <%= @device.latitude %>, lng: <%= @device.longitude %> };
-    zoom = 12;
+    zoom = <%= @settings.default_zoom_specific_location %>;
     <% end %>
 
     map = new google.maps.Map(

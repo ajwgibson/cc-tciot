@@ -2,6 +2,7 @@
 
 class SettingsController < ApplicationController
   authorize_resource :settings
+  skip_before_action :get_current_settings
 
   def show
     @title    = 'System settings'
@@ -33,7 +34,11 @@ class SettingsController < ApplicationController
         :default_footfall_threshold_amber,
         :default_footfall_threshold_red,
         :default_battery_threshold_amber,
-        :default_battery_threshold_red
+        :default_battery_threshold_red,
+        :default_latitude,
+        :default_longitude,
+        :default_zoom_no_location,
+        :default_zoom_specific_location
       )
   end
 end

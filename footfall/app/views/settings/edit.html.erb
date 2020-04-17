@@ -42,11 +42,41 @@
               </div>
             </fieldset>
 
+            <fieldset class="mb-4">
+              <legend class="mb-3 border-bottom">Mapping defaults</legend>
+
+              <div class="row">
+                <div class="col-sm">
+                  <%= f.number_field :default_latitude,
+                        label: 'Default map centre latitude',
+                        min: -90, max: 90, step: 0.000001 %>
+                </div>
+                <div class="col-sm">
+                  <%= f.number_field :default_longitude,
+                        label: 'Default map centre longitude',
+                        min: -180, max: 180, step: 0.000001 %>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm">
+                  <%= f.number_field :default_zoom_no_location,
+                        label: 'Default map zoom when no specific location selected',
+                        min: 0, max: 18, step: 1 %>
+                </div>
+                <div class="col-sm">
+                  <%= f.number_field :default_zoom_specific_location,
+                        label: 'Default map zoom when a specific location is selected',
+                        min: 0, max: 18, step: 1 %>
+                </div>
+              </div>
+            </fieldset>
+
             <div class="mt-2 float-right">
               <%= button_tag(type: "submit", class: "btn btn-w-m btn-primary") do %>
                 <i class="fa fa-check"></i> Save
               <% end %>
-              <%= link_to @settings_path, :class => 'btn btn-w-m btn-default' do %>
+              <%= link_to settings_path, :class => 'btn btn-w-m btn-default' do %>
                 <i class="fa fa-times"></i> Cancel
               <% end %>
             </div>

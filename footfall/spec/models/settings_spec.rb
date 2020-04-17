@@ -92,6 +92,82 @@ RSpec.describe Settings, type: :model do
         FactoryBot.build(:default_settings, default_battery_threshold_red: 100)
       ).not_to be_valid
     end
+
+    it 'has a default_latitude value' do
+      expect(FactoryBot.build(:default_settings, default_latitude: nil)).not_to be_valid
+    end
+
+    it 'has a default_latitude value between -90 and 90' do
+      expect(
+        FactoryBot.build(:default_settings, default_latitude: -90.000001)
+      ).not_to be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_latitude: -90.000000)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_latitude:  90.000000)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_latitude:  90.000001)
+      ).not_to be_valid
+    end
+
+    it 'has a default_longitude value' do
+      expect(FactoryBot.build(:default_settings, default_longitude: nil)).not_to be_valid
+    end
+
+    it 'has a default_longitude value between -180 and 180' do
+      expect(
+        FactoryBot.build(:default_settings, default_longitude: -180.000001)
+      ).not_to be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_longitude: -180.000000)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_longitude:  180.000000)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_longitude:  180.000001)
+      ).not_to be_valid
+    end
+
+    it 'has a default_zoom_no_location value' do
+      expect(FactoryBot.build(:default_settings, default_zoom_no_location: nil)).not_to be_valid
+    end
+
+    it 'has a default_zoom_no_location value between 0 and 18' do
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_no_location:  -1)
+      ).not_to be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_no_location:   0)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_no_location:  18)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_no_location:  19)
+      ).not_to be_valid
+    end
+
+    it 'has a default_zoom_specific_location value' do
+      expect(FactoryBot.build(:default_settings, default_zoom_specific_location: nil)).not_to be_valid
+    end
+
+    it 'has a default_zoom_specific_location value between 0 and 18' do
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_specific_location:  -1)
+      ).not_to be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_specific_location:   0)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_specific_location:  18)
+      ).to     be_valid
+      expect(
+        FactoryBot.build(:default_settings, default_zoom_specific_location:  19)
+      ).not_to be_valid
+    end
   end
 
   # METHODS
