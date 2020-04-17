@@ -4,6 +4,8 @@ class HomeController < ApplicationController
 
     @interval = get_interval_setting
 
+    @alarms = Alarm.active.count
+
     @footfall_red   = Device.with_footfall_status('red').count
     @footfall_amber = Device.with_footfall_status('amber').count
     @footfall_green = Device.with_footfall_status('green').count
@@ -18,6 +20,7 @@ class HomeController < ApplicationController
       format.html
       format.json {
         render json: {
+          'alarms':         @alarms,
           'footfall_red':   @footfall_red,
           'footfall_amber': @footfall_amber,
           'footfall_green': @footfall_green,

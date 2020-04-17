@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_16_201146) do
+ActiveRecord::Schema.define(version: 2020_04_17_135815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,18 @@ ActiveRecord::Schema.define(version: 2020_04_16_201146) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "alarms", force: :cascade do |t|
+    t.bigint "device_id", null: false
+    t.integer "alarm_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.integer "level", default: 0, null: false
+    t.integer "value", null: false
+    t.integer "threshold", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_alarms_on_device_id"
   end
 
   create_table "device_data_records", force: :cascade do |t|

@@ -21,25 +21,31 @@
 
       <li class="<%= 'active' if current_page?('/') %>">
         <%= link_to "/" do %>
-          <i class="fas fa-tachometer-alt"></i> <span class="nav-label">Dashboard</span>
+          <i class="fas fa-fw fa-tachometer-alt"></i> <span class="nav-label">Dashboard</span>
         <% end %>
       </li>
 
       <li class="<%= 'active' if 'devices' == controller.controller_name %>">
         <%= link_to devices_path do %>
-          <i class="fas fa-upload"></i> <span class="nav-label">Devices</span>
+          <i class="fas fa-fw fa-upload"></i> <span class="nav-label">Devices</span>
         <% end %>
       </li>
 
       <li class="<%= 'active' if 'device_groups' == controller.controller_name %>">
         <%= link_to device_groups_path do %>
-          <i class="fas fa-object-group"></i> <span class="nav-label">Device groups</span>
+          <i class="fas fa-fw fa-object-group"></i> <span class="nav-label">Device groups</span>
         <% end %>
       </li>
 
       <li class="<%= 'active' if 'device_data_records' == controller.controller_name %>">
         <%= link_to device_data_records_path do %>
-          <i class="fas fa-stream"></i> <span class="nav-label">Device records</span>
+          <i class="fas fa-fw fa-stream"></i> <span class="nav-label">Device records</span>
+        <% end %>
+      </li>
+
+      <li class="<%= 'active' if 'alarms' == controller.controller_name %>">
+        <%= link_to alarms_path do %>
+          <i class="fas fa-fw fa-bell"></i> <span class="nav-label">Alarms</span>
         <% end %>
       </li>
 
@@ -48,7 +54,7 @@
           .include?(controller.controller_name)
         ) %>">
         <a href="#">
-          <i class="fa fa-cogs"></i>
+          <i class="fa fa-fw fa-cogs"></i>
           <span class="nav-label">System admin </span>
           <span class="fa arrow"></span>
         </a>

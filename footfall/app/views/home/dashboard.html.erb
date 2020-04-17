@@ -40,19 +40,19 @@
 
   <div class="row mt-2">
     <div class="col-lg-6">
-      <div class="row">
-        <div class="col">
-          <div class="widget-head-color-box red-bg p-lg text-center">
-            <div class="m-b-md">
-              <i class="fa fa-bell fa-5x"></i>
-              <h1 class="m-xs">17</h1>
-              <h3 class="font-bold no-margins">
-                Unresolved alarms
-              </h3>
-            </div>
+      <div class="row justify-content-center">
+        <div class="col-sm-4">
+          <div class="widget-head-color-box red-bg p-md text-center">
+            <i class="fa fa-bell fa-4x"></i>
+            <h1 class="m-xs">{{ alarms }}</h1>
+            <h3 class="font-bold no-margins">Active alarms</h3>
           </div>
-          <div class="widget-text-box">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+          <div class="widget-text-box p-xs">
+            <div class="text-right">
+              <%= link_to alarms_path(with_status: 'active') do %>
+                  View details <i class="fa fa-arrow-circle-right"></i>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
@@ -199,6 +199,7 @@
     el: '#vue-app',
 
     data: {
+      alarms: '<%= @alarms %>',
       footfall_red: '<%= @footfall_red %>',
       footfall_amber: '<%= @footfall_amber %>',
       footfall_green: '<%= @footfall_green %>',
@@ -226,6 +227,8 @@
         axios
           .get('<%= root_path(format: :json) %>')
           .then(response => {
+            this.alarms = response.data.alarms;
+
             this.footfall_red   = response.data.footfall_red;
             this.footfall_amber = response.data.footfall_amber;
             this.footfall_green = response.data.footfall_green;
@@ -240,35 +243,13 @@
           .then(() => {
             $("#spinner").hide();
           });
-      },
-
-      doAlert: function(text, type) {
-        swal("Attention!", text, type);
       }
     },
 
     watch: {
-      footfall_red: function(newValue, oldValue) {
+      alarms: function(newValue, oldValue) {
         if (newValue > oldValue) {
-          this.doAlert("A new footfall red alert has been raised!", "error");
-        }
-      },
-
-      footfall_amber: function(newValue, oldValue) {
-        if (newValue > oldValue) {
-          this.doAlert("A new footfall amber alert has been raised!", "warning");
-        }
-      },
-
-      battery_red: function(newValue, oldValue) {
-        if (newValue > oldValue) {
-          this.doAlert("A new battery red alert has been raised!", "error");
-        }
-      },
-
-      battery_amber: function(newValue, oldValue) {
-        if (newValue > oldValue) {
-          this.doAlert("A new battery amber alert has been raised!", "warning");
+          swal("Attention!", "A new alarm has been raised!", "warning");
         }
       }
     }

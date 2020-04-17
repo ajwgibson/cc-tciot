@@ -30,4 +30,11 @@ Rails.application.routes.draw do
 
   get 'device_data_records/clear_filter'
   resources :device_data_records, only: [:index, :destroy]
+
+  get 'alarms/clear_filter'
+  resources :alarms, only: [:index, :show] do
+    member do
+      put 'clear'
+    end
+  end
 end
