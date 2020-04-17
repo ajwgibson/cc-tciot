@@ -214,6 +214,28 @@ RSpec.describe Device, type: :model do
     end
   end
 
+  describe 'self.with_a_location' do
+    before(:each) do
+      @a = FactoryBot.create(:default_device, latitude: 1, longitude: 2)
+      @b = FactoryBot.create(:default_device, latitude: nil, longitude: 2)
+      @c = FactoryBot.create(:default_device, latitude: 1, longitude: nil)
+      @d = FactoryBot.create(:default_device, latitude: nil, longitude: nil)
+    end
+    context 'when called with a value of true' do
+      it 'includes records where the latitude and longitude are both set' do
+        filtered = Device.with_a_location('true')
+        expect(filtered).to     eq([@a])
+      end
+    end
+    context 'when called with a value of false' do
+      it 'includes records where the latitude and/or longitude is not set' do
+        filtered = Device.with_a_location('false')
+        expect(filtered).not_to include(@a)
+        expect(filtered).to include(@b, @c, @d)
+      end
+    end
+  end
+
   # METHODS
   describe 'self.new_device' do
     before(:each) do
@@ -226,6 +248,192 @@ RSpec.describe Device, type: :model do
       expect(device.battery_threshold_amber).to eq(settings.default_battery_threshold_amber)
       expect(device.footfall_threshold_red).to eq(settings.default_footfall_threshold_red)
       expect(device.footfall_threshold_amber).to eq(settings.default_footfall_threshold_amber)
+    end
+  end
+
+  describe '#footfall_red?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        footfall_threshold_amber: 10,
+        footfall_threshold_red: 20
+      )
+    }
+    context 'when footfall value is nil' do
+      it 'is false' do
+        device.footfall = nil
+        expect(device.footfall_red?).to be_falsey
+      end
+    end
+    context 'when footfall count < red threshold' do
+      it 'is false' do
+        device.footfall = device.footfall_threshold_red - 1
+        expect(device.footfall_red?).to be_falsey
+      end
+    end
+    context 'when footfall count >= red threshold' do
+      it 'is true' do
+        device.footfall = device.footfall_threshold_red
+        expect(device.footfall_red?).to be_truthy
+      end
+    end
+  end
+
+  describe '#footfall_amber?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        footfall_threshold_amber: 10,
+        footfall_threshold_red: 20
+      )
+    }
+    context 'when footfall value is nil' do
+      it 'is false' do
+        device.footfall = nil
+        expect(device.footfall_amber?).to be_falsey
+      end
+    end
+    context 'when footfall count < amber threshold' do
+      it 'is false' do
+        device.footfall = device.footfall_threshold_amber - 1
+        expect(device.footfall_amber?).to be_falsey
+      end
+    end
+    context 'when footfall count >= amber threshold' do
+      it 'is true' do
+        device.footfall = device.footfall_threshold_amber
+        expect(device.footfall_amber?).to be_truthy
+
+        device.footfall = device.footfall_threshold_amber + 1
+        expect(device.footfall_amber?).to be_truthy
+      end
+    end
+    context 'when footfall count >= red threshold' do
+      it 'is false' do
+        device.footfall = device.footfall_threshold_red
+        expect(device.footfall_amber?).to be_falsey
+      end
+    end
+  end
+
+  describe '#footfall_green?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        footfall_threshold_amber: 10,
+        footfall_threshold_red: 20
+      )
+    }
+    context 'when footfall value is nil' do
+      it 'is false' do
+        device.footfall = nil
+        expect(device.footfall_green?).to be_falsey
+      end
+    end
+    context 'when footfall count < amber threshold' do
+      it 'is true' do
+        device.footfall = device.footfall_threshold_amber - 1
+        expect(device.footfall_green?).to be_truthy
+      end
+    end
+    context 'when footfall count >= amber threshold' do
+      it 'is false' do
+        device.footfall = device.footfall_threshold_amber
+        expect(device.footfall_green?).to be_falsey
+      end
+    end
+  end
+
+  describe '#battery_red?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        battery_threshold_amber: 10,
+        battery_threshold_red: 20
+      )
+    }
+    context 'when battery value is nil' do
+      it 'is false' do
+        device.battery = nil
+        expect(device.battery_red?).to be_falsey
+      end
+    end
+    context 'when battery value <= red threshold' do
+      it 'is true' do
+        device.battery = device.battery_threshold_red
+        expect(device.battery_red?).to be_truthy
+      end
+    end
+    context 'when battery value > red threshold' do
+      it 'is false' do
+        device.battery = device.battery_threshold_red + 1
+        expect(device.battery_red?).to be_falsey
+      end
+    end
+  end
+
+  describe '#battery_amber?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        battery_threshold_amber: 20,
+        battery_threshold_red: 10
+      )
+    }
+    context 'when battery value is nil' do
+      it 'is false' do
+        device.battery = nil
+        expect(device.battery_amber?).to be_falsey
+      end
+    end
+    context 'when battery value <= red threshold' do
+      it 'is false' do
+        device.battery = device.battery_threshold_red
+        expect(device.battery_amber?).to be_falsey
+      end
+    end
+    context 'when battery value <= amber threshold' do
+      it 'is true' do
+        device.battery = device.battery_threshold_amber
+        expect(device.battery_amber?).to be_truthy
+
+        device.battery = device.battery_threshold_amber - 1
+        expect(device.battery_amber?).to be_truthy
+      end
+    end
+    context 'when battery value > amber threshold' do
+      it 'is false' do
+        device.battery = device.battery_threshold_amber + 1
+        expect(device.battery_amber?).to be_falsey
+      end
+    end
+  end
+
+  describe '#battery_green?' do
+    let(:device) {
+      FactoryBot.build(
+        :default_device,
+        battery_threshold_amber: 10,
+        battery_threshold_red: 20
+      )
+    }
+    context 'when battery value is nil' do
+      it 'is false' do
+        device.battery = nil
+        expect(device.battery_green?).to be_falsey
+      end
+    end
+    context 'when battery value > amber threshold' do
+      it 'is true' do
+        device.battery = device.battery_threshold_amber + 1
+        expect(device.battery_green?).to be_truthy
+      end
+    end
+    context 'when battery value <= amber threshold' do
+      it 'is false' do
+        device.battery = device.battery_threshold_amber
+        expect(device.battery_green?).to be_falsey
+      end
     end
   end
 

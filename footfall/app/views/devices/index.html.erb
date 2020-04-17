@@ -26,13 +26,19 @@
                       <%= label_tag :with_device_id, 'Find devices whose ids contain...', :class => 'control-label' %>
                       <%= text_field_tag :with_device_id, @filter[:with_device_id], :class => 'form-control' %>
                     </div>
-                  </div>
-                  <div class="col-sm">
                     <div class="form-group">
                       <%= label_tag :with_device_group_id, 'Find devices in device group...', :class => 'control-label' %>
                       <%= select_tag :with_device_group_id,
                             options_from_collection_for_select(@device_groups, 'id', 'name', @filter[:with_device_group_id]),
                             { prompt: "Please select a device group...", class: 'form-control' } %>
+                    </div>
+                  </div>
+                  <div class="col-sm">
+                    <div class="form-group">
+                      <%= label_tag :with_a_location, 'Find devices with location set...', :class => 'control-label' %>
+                      <%= select_tag :with_a_location,
+                            options_for_select([['Yes', 'true'],['No', 'false']], @filter[:with_a_location]),
+                            { prompt: "Please select a value...", class: 'form-control' } %>
                     </div>
                   </div>
                   <div class="col-sm">

@@ -55,11 +55,17 @@ class Device < ApplicationRecord
     Device.where('footfall >= footfall_threshold_red')
   end
 
+  def self.with_a_location(value)
+    value = value.to_s.downcase == "true"
+    return Device.where.not(latitude: nil).where.not(longitude: nil) if value
+    Device.where(latitude: nil).or(where(longitude: nil))
+  end
+
+  # METHODS
   def self.status_values
     ['red', 'amber', 'green']
   end
 
-  # METHODS
   def self.new_device
     settings = Settings.current
     Device.new(
@@ -72,6 +78,44 @@ class Device < ApplicationRecord
 
   def location_as_string
     "#{latitude}, #{longitude}" unless latitude.blank? || longitude.blank?
+  end
+
+  def footfall_red?
+    return false unless footfall
+    return true if footfall >= footfall_threshold_red
+    false
+  end
+
+  def footfall_amber?
+    return false unless footfall
+    return false if footfall < footfall_threshold_amber
+    return false if footfall >= footfall_threshold_red
+    true
+  end
+
+  def footfall_green?
+    return false unless footfall
+    return true if footfall < footfall_threshold_amber
+    false
+  end
+
+  def battery_red?
+    return false unless battery
+    return true if battery <= battery_threshold_red
+    false
+  end
+
+  def battery_amber?
+    return false unless battery
+    return false if battery > battery_threshold_amber
+    return false if battery <= battery_threshold_red
+    true
+  end
+
+  def battery_green?
+    return false unless battery
+    return true if battery > battery_threshold_amber
+    false
   end
 
   private

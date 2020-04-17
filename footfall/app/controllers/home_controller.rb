@@ -12,6 +12,8 @@ class HomeController < ApplicationController
     @battery_amber = Device.with_battery_status('amber').count
     @battery_green = Device.with_battery_status('green').count
 
+    @devices_to_mark = Device.with_a_location(true)
+
     respond_to do |format|
       format.html
       format.json {

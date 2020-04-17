@@ -66,6 +66,10 @@ RSpec.describe DevicesController, type: :controller do
       expect(Device).to receive(:with_footfall_status).with('xxx').and_return(devices)
       get :index, params: { with_footfall_status: 'xxx' }
     end
+    it "applies the 'with_a_location' filter" do
+      expect(Device).to receive(:with_a_location).with('true').and_return(devices)
+      get :index, params: { with_a_location: true }
+    end
     context 'applies paging' do
       before(:each) do
         Kaminari.configure do |config|
