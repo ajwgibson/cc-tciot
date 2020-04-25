@@ -89,4 +89,8 @@ RSpec.describe DevicesHelper, type: :helper do
       end
     end
   end
+
+  describe 'device_map_icon_url' do
+    it 'has not been tested yet Alan!!!'
+  end
 end

@@ -437,6 +437,10 @@ RSpec.describe Device, type: :model do
     end
   end
 
+  describe '#colour' do
+    it 'has not been tested yet Alan!!!'
+  end
+
   describe '#location_as_string' do
     it 'returns latitude and longitude' do
       device = FactoryBot.build(:default_device, latitude: 1.23, longitude: -9.87)

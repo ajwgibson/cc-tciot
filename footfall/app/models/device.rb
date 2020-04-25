@@ -119,6 +119,12 @@ class Device < ApplicationRecord
     false
   end
 
+  def colour
+    return 'red' if self.footfall_red? || self.battery_red? || self.alarms.active.red.any?
+    return 'orange' if self.footfall_amber? || self.battery_amber? || self.alarms.active.amber.any?
+    return 'green'
+  end
+
   def raise_footfall_alarm(footfall)
     return false if footfall.nil?
     return false if self.alarms.active.footfall.red.count > 0

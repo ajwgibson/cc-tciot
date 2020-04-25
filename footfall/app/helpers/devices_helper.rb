@@ -37,18 +37,6 @@ module DevicesHelper
   end
 
   def device_map_icon_url(device)
-    if device.footfall_red? || device.battery_red?
-      return "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-    end
-
-    if device.footfall_amber? || device.battery_amber?
-      return "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
-    end
-
-    if device.footfall_green? || device.battery_green?
-      return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-    end
-
-    return "http://maps.google.com/mapfiles/ms/icons/purple-dot.png";
+    return "http://maps.google.com/mapfiles/ms/icons/#{device.colour}-dot.png"
   end
 end
