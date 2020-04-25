@@ -58,6 +58,7 @@ class RetrieveFootfallDataJob < ApplicationJob
 
     background_task.finish :success
 
-    #BackgroundTask.schedule_raise_alarms_task
+    BackgroundTask.schedule_update_device_counters_task
+    BackgroundTask.schedule_raise_alarms_task
   end
 end

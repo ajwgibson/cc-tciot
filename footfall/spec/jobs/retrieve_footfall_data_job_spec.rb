@@ -7,13 +7,17 @@ RSpec.describe RetrieveFootfallDataJob, type: :job do
     let(:d1) { { dev_id: 'a', footfall: 1, battery: 2, time: '2020-04-24T13:23:24.123Z' } }
     let(:d2) { { dev_id: 'b', footfall: 3, battery: 4, time: '2020-04-25T13:23:24.123Z' } }
     let(:d3) { { dev_id: 'b', footfall: 3, battery: 4, time: '2020-04-25T13:23:24.123Z' } }
+
     before(:each) do
+      allow(BackgroundTask).to receive(:schedule_update_device_counters_task)
+      allow(BackgroundTask).to receive(:schedule_raise_alarms_task)
       allow(DynamoDbService).to receive(:new).and_return(service)
       allow(service).to receive(:get_footfall_data).and_return([d1, d2, d3])
       allow(service).to receive(:delete_footfall_data)
       allow(task).to receive(:start)
       allow(task).to receive(:finish)
       allow(task).to receive(:update)
+
       RetrieveFootfallDataJob.perform_now task
     end
 
@@ -75,8 +79,9 @@ RSpec.describe RetrieveFootfallDataJob, type: :job do
       )
     end
 
-    # it 'schedules an update client statuses job to run later' do
-    #   expect(BackgroundTask).to have_received(:schedule_update_client_statuses_task)
-    # end
+    it 'schedules follow up tasks' do
+      expect(BackgroundTask).to have_received(:schedule_raise_alarms_task)
+      expect(BackgroundTask).to have_received(:schedule_update_device_counters_task)
+    end
   end
 end

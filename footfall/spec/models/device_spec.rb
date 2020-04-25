@@ -451,4 +451,12 @@ RSpec.describe Device, type: :model do
       expect(device.location_as_string).to be_nil
     end
   end
+
+  describe '#raise_footfall_alarm' do
+    it 'has not been tested yet Alan!!!'
+  end
+
+  describe '#raise_battery_alarm' do
+    it 'has not been tested yet Alan!!!'
+  end
 end

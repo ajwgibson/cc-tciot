@@ -5,6 +5,7 @@ class BackgroundTask < ApplicationRecord
   enum task_type: %i[
     retrieve_footfall_data
     raise_alarms
+    update_device_counters
   ]
 
   enum status: %i[
@@ -41,6 +42,8 @@ class BackgroundTask < ApplicationRecord
 
   def schedule_task
     RetrieveFootfallDataJob.perform_later(self) if retrieve_footfall_data?
+    UpdateDeviceCountersJob.perform_later(self) if update_device_counters?
+    RaiseAlarmsJob.perform_later(self) if raise_alarms?
   end
 
   def start
@@ -49,5 +52,15 @@ class BackgroundTask < ApplicationRecord
 
   def finish(outcome)
     update(status: :finished, finished_at: Time.now, outcome: outcome)
+  end
+
+  def self.schedule_raise_alarms_task
+    task = create(task_type: :raise_alarms)
+    task.schedule_task
+  end
+
+  def self.schedule_update_device_counters_task
+    task = create(task_type: :update_device_counters)
+    task.schedule_task
   end
 end

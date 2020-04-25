@@ -119,6 +119,64 @@ class Device < ApplicationRecord
     false
   end
 
+  def raise_footfall_alarm(footfall)
+    return false if footfall.nil?
+    return false if self.alarms.active.footfall.red.count > 0
+
+    if footfall > self.footfall_threshold_red
+      self.alarms.create(
+        alarm_type: :footfall,
+        level: :red,
+        value: footfall,
+        threshold: self.footfall_threshold_red
+      )
+      return true
+    end
+
+    return false if self.alarms.active.footfall.amber.count > 0
+
+    if footfall > self.footfall_threshold_amber
+      self.alarms.create(
+        alarm_type: :footfall,
+        level: :amber,
+        value: footfall,
+        threshold: self.footfall_threshold_amber
+      )
+      return true
+    end
+
+    return false
+  end
+
+  def raise_battery_alarm(battery)
+    return false if battery.nil?
+    return false if self.alarms.active.battery.red.count > 0
+
+    if battery < self.battery_threshold_red
+      self.alarms.create(
+        alarm_type: :battery,
+        level: :red,
+        value: battery,
+        threshold: self.battery_threshold_red
+      )
+      return true
+    end
+
+    return false if self.alarms.active.battery.amber.count > 0
+
+    if battery < self.battery_threshold_amber
+      self.alarms.create(
+        alarm_type: :battery,
+        level: :amber,
+        value: battery,
+        threshold: self.battery_threshold_amber
+      )
+      return true
+    end
+
+    return false
+  end
+
   private
 
   def reorder_thresholds

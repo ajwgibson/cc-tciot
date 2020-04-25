@@ -63,7 +63,8 @@ RSpec.describe BackgroundTask, type: :model do
     it 'returns the task type values as an array suitable for a select list' do
       expect(BackgroundTask.selectable_task_types).to eq([
         ['Raise alarms', 'raise_alarms'],
-        ['Retrieve footfall data', 'retrieve_footfall_data']
+        ['Retrieve footfall data', 'retrieve_footfall_data'],
+        ['Update device counters', 'update_device_counters']
       ])
     end
   end
@@ -96,6 +97,28 @@ RSpec.describe BackgroundTask, type: :model do
       end
       it 'schedules a retrieve footfall data job' do
         expect(RetrieveFootfallDataJob).to receive(:perform_later).with(task)
+        task.schedule_task
+      end
+    end
+
+    context 'for a task of type raise_alarms' do
+      let(:task) { FactoryBot.build(:default_background_task, task_type: :raise_alarms) }
+      before(:each) do
+        allow(RaiseAlarmsJob).to receive(:perform_later).with(task)
+      end
+      it 'schedules a retrieve footfall data job' do
+        expect(RaiseAlarmsJob).to receive(:perform_later).with(task)
+        task.schedule_task
+      end
+    end
+
+    context 'for a task of type update_device_counters' do
+      let(:task) { FactoryBot.build(:default_background_task, task_type: :update_device_counters) }
+      before(:each) do
+        allow(UpdateDeviceCountersJob).to receive(:perform_later).with(task)
+      end
+      it 'schedules a retrieve footfall data job' do
+        expect(UpdateDeviceCountersJob).to receive(:perform_later).with(task)
         task.schedule_task
       end
     end
