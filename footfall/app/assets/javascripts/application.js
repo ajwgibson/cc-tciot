@@ -20,6 +20,7 @@
 //= require metisMenu/jquery.metisMenu.js
 //= require datepicker/bootstrap-datepicker.js
 //= require chartjs/Chart.bundle.min.js
+//= require chartjs/chartjs-plugin-annotation.min.js
 //= require toastr/toastr.min.js
 //= require toastr_config
 //= require sweetalert/sweetalert.min.js

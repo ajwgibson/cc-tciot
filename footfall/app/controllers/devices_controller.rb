@@ -20,6 +20,11 @@ class DevicesController < ApplicationController
 
   def show
     @title = 'Device details'
+    @data =
+      DeviceDataRecord
+        .with_device_id(@device.device_id)
+        .order(recorded_at: :desc)
+        .limit(96).reverse
   end
 
   def new

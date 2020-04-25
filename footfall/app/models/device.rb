@@ -5,6 +5,7 @@ class Device < ApplicationRecord
   has_paper_trail
 
   belongs_to :device_group, optional: true
+  has_many :alarms, dependent: :destroy
 
   # CALLBACKS
   before_save :reorder_thresholds
