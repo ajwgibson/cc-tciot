@@ -62,6 +62,9 @@
           <li class="<%= 'active' if (controller.controller_name == 'users') %>">
             <%= link_to 'System users', users_path(with_status: :active) %>
           </li>
+          <li class="<%= 'active' if (controller.controller_name == 'background_tasks') %>">
+            <%= link_to 'Background tasks', background_tasks_path %>
+          </li>
           <li class="<%= 'active' if (controller.controller_name == 'audits') %>">
             <%= link_to 'Audited events', audits_path %>
           </li>

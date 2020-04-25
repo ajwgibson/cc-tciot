@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_135815) do
+ActiveRecord::Schema.define(version: 2020_04_24_110231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,20 @@ ActiveRecord::Schema.define(version: 2020_04_17_135815) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_alarms_on_device_id"
+  end
+
+  create_table "background_tasks", force: :cascade do |t|
+    t.integer "task_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.integer "outcome", default: 0, null: false
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.json "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outcome"], name: "index_background_tasks_on_outcome"
+    t.index ["status"], name: "index_background_tasks_on_status"
+    t.index ["task_type"], name: "index_background_tasks_on_task_type"
   end
 
   create_table "device_data_records", force: :cascade do |t|

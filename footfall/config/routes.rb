@@ -37,4 +37,7 @@ Rails.application.routes.draw do
       put 'clear'
     end
   end
+
+  get 'background_tasks/clear_filter'
+  resources :background_tasks, only: [:index, :show, :new, :create, :destroy]
 end
