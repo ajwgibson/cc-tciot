@@ -32,5 +32,6 @@ module Footfall
 
     # Custom config
     config.x.google.maps_api_key  = 'xxx'
+    config.x.aws.footfall_table_name = 'footfall-data'
   end
 end

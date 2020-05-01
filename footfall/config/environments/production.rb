@@ -108,6 +108,7 @@ Rails.application.configure do
 
   # Custom config
   config.x.google.maps_api_key = ENV['FOOTFALL_GOOGLE_MAPS_API_KEY']
+  config.x.aws.footfall_table_name = ENV['FOOTFALL_AWS_FOOTFALL_TABLE_NAME']
 end
 
 Rails.application.routes.default_url_options[:host] = ENV['FOOTFALL_HOST']
