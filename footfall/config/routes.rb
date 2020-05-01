@@ -40,4 +40,8 @@ Rails.application.routes.draw do
 
   get 'background_tasks/clear_filter'
   resources :background_tasks, only: [:index, :show, :new, :create, :destroy]
+
+  namespace :api, path: 'api' do
+    resources :tasks, only: :create
+  end
 end
