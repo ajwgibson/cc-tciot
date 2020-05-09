@@ -24,19 +24,24 @@ const lmic_pinmap lmic_pins = {
     .dio = {2, 6, 7},
 };
 
-const int pirInputPin = 3;
 const int ledPin = 5;
-
-int          val   = 0;
 unsigned int count = 0;
-unsigned int battery = 100;
 
+//
+// Get battery voltage
+//
+unsigned int getVoltage() {
+    int val = analogRead(A4);
+    unsigned int voltage = (unsigned int) ((val * 100.0) / 1024.0);
+    Serial.print("Voltage (%): ");
+    Serial.println(voltage);
+    return voltage;
+}
 
 //
 // Event handler
 //
 void onEvent (ev_t ev) {
-
     Serial.print(os_getTime());
     Serial.print(": ");
 
@@ -52,14 +57,17 @@ void onEvent (ev_t ev) {
     }
 }
 
+
 //
 // Send some data...
 //
 void do_send(osjob_t* j) {
-
     byte message[4];
-    message[3] = (byte) battery;
-    message[2] = (byte) (battery >> 8);
+
+    unsigned int voltage = getVoltage();
+
+    message[3] = (byte) voltage;
+    message[2] = (byte) (voltage >> 8);
     message[1] = (byte) count;
     message[0] = (byte) (count >> 8);
 
@@ -84,9 +92,8 @@ void do_send(osjob_t* j) {
 // Device setup routine
 //
 void setup() {
-
-    pinMode(pirInputPin, INPUT);
     pinMode(ledPin,      OUTPUT);
+    pinMode(A4,          INPUT);
 
     Serial.begin(9600);
 
@@ -101,11 +108,6 @@ void setup() {
 
     // Use channel 0 only to align with my test gateway
     for (int i=1; i<=8; i++) LMIC_disableChannel(i);
-
-    // Wait for PIR to stabilize...
-    digitalWrite(ledPin, HIGH);
-    delay(60000);
-    digitalWrite(ledPin, LOW);
 
     Serial.println("Running... ");
 
@@ -123,35 +125,25 @@ unsigned int since     = 0;
 // The mighty loop...
 //
 void loop() {
-
     now = millis();
-
     since = now - triggered;
 
-    if (since > 6000) {
+    if (since > 5000) {
+        triggered = millis();
 
-        val = digitalRead(pirInputPin);
+        digitalWrite(ledPin, HIGH);
 
-        if (val == HIGH) {
+        count = count + random(5);
 
-          triggered = millis();
+        Serial.print("Count: ");
+        Serial.println(count);
 
-          digitalWrite(ledPin, HIGH);
+        unsigned int voltage = getVoltage();
 
-          Serial.println("Motion detected!");
+        delay(1000);
 
-          count = count + 1;
-
-          Serial.print("Count: ");
-          Serial.println(count);
-
-          Serial.println("Resetting...    ");
-
-        } else {
-
-          digitalWrite(ledPin, LOW);
-
-        }
+    } else {
+        digitalWrite(ledPin, LOW);
     }
 
     os_runloop_once();

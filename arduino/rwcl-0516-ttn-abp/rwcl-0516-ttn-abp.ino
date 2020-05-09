@@ -24,7 +24,7 @@ const lmic_pinmap lmic_pins = {
     .dio = {2, 6, 7},
 };
 
-const int pirInputPin = 3;
+const int inputPin = 3;
 const int ledPin = 5;
 
 int          val   = 0;
@@ -56,12 +56,12 @@ void onEvent (ev_t ev) {
 // Send some data...
 //
 void do_send(osjob_t* j) {
-
     byte message[4];
+
     message[3] = (byte) battery;
     message[2] = (byte) (battery >> 8);
     message[1] = (byte) count;
-    message[0] = (byte) (count >> 8);
+    message[0] = (byte) count >> 8;
 
     // Check that there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
@@ -85,8 +85,8 @@ void do_send(osjob_t* j) {
 //
 void setup() {
 
-    pinMode(pirInputPin, INPUT);
-    pinMode(ledPin,      OUTPUT);
+    pinMode(inputPin, INPUT);
+    pinMode(ledPin,   OUTPUT);
 
     Serial.begin(9600);
 
@@ -102,9 +102,9 @@ void setup() {
     // Use channel 0 only to align with my test gateway
     for (int i=1; i<=8; i++) LMIC_disableChannel(i);
 
-    // Wait for PIR to stabilize...
+    // Wait for seonsor to stabilize...
     digitalWrite(ledPin, HIGH);
-    delay(60000);
+    delay(10000);
     digitalWrite(ledPin, LOW);
 
     Serial.println("Running... ");
@@ -128,9 +128,9 @@ void loop() {
 
     since = now - triggered;
 
-    if (since > 6000) {
+    if (since > 5000) {
 
-        val = digitalRead(pirInputPin);
+        val = digitalRead(inputPin);
 
         if (val == HIGH) {
 
